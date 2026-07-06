@@ -42,8 +42,8 @@ Endearing Peace is a calorie and nutrition tracking platform. Users can register
  
 | Name  | Role                                  |
 |-------|----------------------------------------|
-| Me    | Project Manager, Half-Developer & QA   |
-| Makar | Half-Developer & QA                    |
+| Volodymyr   | Project Manager, FullStack & QA   |
+| Makar | FullStack & QA                    |
 
  
 ### Prerequisites
