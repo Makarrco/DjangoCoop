@@ -14,26 +14,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib.auth import views as django_auth_views  # LoginView/LogoutView з Django
 from django.urls import path
-from blog import views
+from django.contrib import admin
+from blog import views, auth_views
+
 
 urlpatterns = [
-    # --- Auth ---
-    path("register/", views.register_view, name="register"),
+    path("", views.home_view, name="home"),
+ 
+    #Auth
+    path("register/", auth_views.register_view, name="register"),
     path(
         "login/",
-        auth_views.LoginView.as_view(template_name="accounts/login.html"),
+        django_auth_views.LoginView.as_view(template_name="accounts/login.html"),
         name="login",
     ),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-
-    # --- Профіль (тільки для залогінених — login_required усередині view) ---
+    path("logout/", django_auth_views.LogoutView.as_view(), name="logout"),
+ 
+    #Profile
+    path("profile/create/", auth_views.profile_create_view, name="profile_create"),
     path("profile/", views.profile_view, name="profile"),
-
-    # --- Щоденник (тільки для залогінених) ---
+    path("profile/edit/", views.profile_edit_view, name="profile_edit"),
+ 
+    #Diary
     path("diary/", views.diary_view, name="diary"),
     path("diary/add/", views.diary_add_view, name="diary_add"),
-
-    path('admin/', admin.site.urls),
+    path("diary/<int:pk>/delete/", views.diary_delete_view, name="diary_delete"),
+    path("admin/", admin.site.urls),
 ]

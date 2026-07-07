@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import DiaryEntry, Category, Product, Dish, DishIngredient
+from .models import UserProfile, DiaryEntry, Category, Product, Dish, DishIngredient
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Email")
@@ -41,6 +41,13 @@ class DiaryEntryForm(forms.ModelForm):
 
         return cleaned_data
     
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["gender", "age", "height_cm", "weight_kg", "activity_level", "goal"]
+
+
+    
 # Volodymur
 
 class CategoryForm(forms.ModelForm):
@@ -72,3 +79,4 @@ DishIngredientFormSet = forms.inlineformset_factory(
     extra=3,
     can_delete=True
 )
+

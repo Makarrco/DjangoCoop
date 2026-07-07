@@ -28,6 +28,6 @@ class DishAdmin(admin.ModelAdmin):
         instances = formset.save()
         dish = formset.instance
         
-        if dish.ingredients.exists():
+        if dish.ingridients.exists():
             dish.calories = dish.get_calories()
             dish.save(update_fields=['calories'])

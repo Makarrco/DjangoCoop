@@ -4,7 +4,6 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from numpy.random.mtrand import choice 
 
 
 # Create your models here.
