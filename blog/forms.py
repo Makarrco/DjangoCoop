@@ -80,3 +80,6 @@ DishIngredientFormSet = forms.inlineformset_factory(
     can_delete=True
 )
 
+class SearchForm(forms.Form):
+    name = forms.CharField(required=False)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="All categories")

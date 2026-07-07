@@ -41,5 +41,14 @@ urlpatterns = [
     path("diary/", views.diary_view, name="diary"),
     path("diary/add/", views.diary_add_view, name="diary_add"),
     path("diary/<int:pk>/delete/", views.diary_delete_view, name="diary_delete"),
+    # path("seed_database/", views.seed_database),
+    
+    # Search
+    path("search/", views.search_panel, name="search"),
+    
+    # Admin
     path("admin/", admin.site.urls),
+    
+    # 404
+    path("<path:rest>", views.error),
 ]

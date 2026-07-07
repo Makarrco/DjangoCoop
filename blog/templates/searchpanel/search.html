@@ -1,0 +1,19 @@
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">Search</button>
+</form>
+
+    <h3>Products</h3>
+    {% for product in products %}
+        <p>{{ product.name }} — {{ product.calories_per_100g }} kcal/100g</p>
+    {% empty %}
+        <p>No products found.</p>
+    {% endfor %}
+
+    <h3>Dishes</h3>
+    {% for dish in dishes %}
+        <p>{{ dish.name }} — {{ dish.get_calories }} kcal</p>
+    {% empty %}
+        <p>No dishes found.</p>
+    {% endfor %}
