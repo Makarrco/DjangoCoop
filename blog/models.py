@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from numpy.random.mtrand import choice
+from numpy.random.mtrand import choice 
 
 
 # Create your models here.
@@ -12,7 +12,6 @@ class ActivityLevel(models.TextChoices):
     LOW = "low", "Низький"
     MEDIUM = "medium", "Середній"
     HIGH = "high", "Високий"
-
 
 class Goal(models.TextChoices):
     LOSE = "lose", "Схуднути"
@@ -144,4 +143,54 @@ class DiaryEntry(models.Model): # Макар - дороблю
             self.calories = round(self.dish.calories * self.amount_grams / 100)
         super().save(*args, **kwargs)
 
-####Volodymur
+## Volodymyr
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Category Name")
+    
+    def __str__(self):
+        return self.name
+    
+class Product(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Product Name")
+    calories_per_100g = models.PositiveIntegerField(verbose_name="Calories per 100g")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products", verbose_name="Category")
+    protein_per_100g = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Protein per 100g")
+    fat_per_100g = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Fat per 100g")
+    carbs_per_100g = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Carbohydrates per 100g")
+
+    def __str__(self):
+        return self.name
+
+class Dish(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Dish Name")
+    description = models.TextField(blank=True, verbose_name="Description")
+    calories = models.PositiveIntegerField(null=True, blank=True, verbose_name="Calories")
+    
+    ingridients = models.ManyToManyField(
+        Product,
+        through="DishIngredient",
+        related_name="dishes",
+        verbose_name="Ingridients"
+    )
+    
+    def get_calories(self):
+        if self.ingridients.exists():
+            total = sum(ingridient.weight_grams / 100 * ingridient.product.calories_per_100g 
+                        for ingridient in self.dishingredients.select_related('product'))
+            return round(total)
+        return self.calories
+    
+    def __str__(self):
+        return self.name
+    
+class DishIngredient(models.Model):
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishingredients")
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    weight_grams = models.PositiveIntegerField(verbose_name="Weight in grams")
+    
+    def __str__(self):
+        return f"{self.weight_grams}g of {self.product.name} in {self.dish.name}"
+    
+    class Meta:
+        unique_together = ("dish", "product")
