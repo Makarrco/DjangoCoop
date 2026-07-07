@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Додати запис{% endblock %}
+
+{% block content %}
+<h1>Додати запис у щоденник</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Додати</button>
+</form>
+
+<a href="{% url 'diary' %}">← Назад до щоденника</a>
+{% endblock %}

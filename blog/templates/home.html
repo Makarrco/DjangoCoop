@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Головна{% endblock %}
+
+{% block content %}
+<h1>Підрахунок калорій</h1>
+<p>Ласкаво просимо! Знаходьте калорійність продуктів, рахуйте денну норму і ведіть щоденник харчування.</p>
+
+{% if not user.is_authenticated %}
+    <p><a href="{% url 'register' %}">Зареєструватися</a> або <a href="{% url 'login' %}">увійти</a>, щоб почати вести щоденник.</p>
+{% else %}
+    <p><a href="{% url 'diary' %}">Перейти до щоденника</a></p>
+{% endif %}
+{% endblock %}

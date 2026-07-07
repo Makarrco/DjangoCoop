@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Щоденник харчування{% endblock %}
+
+{% block content %}
+<h1>Щоденник харчування</h1>
+
+<a href="{% url 'diary_add' %}">+ Додати запис</a>
+
+{% if norm.calories %}
+    <p>Денна норма: <strong>{{ norm.calories }} ккал</strong></p>
+{% endif %}
+
+{% if not entries %}
+    <p>Записів поки немає.</p>
+{% else %}
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Продукт / страва</th>
+                <th>Кількість (г)</th>
+                <th>Калорії</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.product|default:entry.dish }}</td>
+                <td>{{ entry.amount_grams }}</td>
+                <td>{{ entry.calories }}</td>
+                <td>
+                    <a href="{% url 'diary_delete' entry.pk %}">Видалити</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Підсумки за день</h2>
+    <ul>
+    {% for date, total in daily_totals.items %}
+        <li>
+            {{ date }}: {{ total }} ккал
+            {% if norm.calories %}
+                з {{ norm.calories }} ккал
+                ({% widthratio total norm.calories 100 %}%)
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

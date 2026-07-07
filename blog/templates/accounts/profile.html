@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Мій профіль{% endblock %}
+
+{% block content %}
+<h1>Мій профіль</h1>
+
+<ul>
+    <li>Стать: {{ profile.get_gender_display }}</li>
+    <li>Вік: {{ profile.age }}</li>
+    <li>Зріст: {{ profile.height_cm }} см</li>
+    <li>Вага: {{ profile.weight_kg }} кг</li>
+    <li>Рівень активності: {{ profile.get_activity_level_display }}</li>
+    <li>Ціль: {{ profile.get_goal_display }}</li>
+</ul>
+
+<a href="{% url 'profile_edit' %}">Редагувати профіль</a>
+
+<hr>
+
+<h2>Денна норма калорій</h2>
+
+{% if norm.calories %}
+    <p><strong>{{ norm.calories }} ккал/день</strong></p>
+{% else %}
+    <p><em>Норму не показано — див. попередження нижче.</em></p>
+{% endif %}
+
+<p style="color: gray; font-size: 0.9em;">⚠️ {{ norm.warning }}</p>
+{% endblock %}

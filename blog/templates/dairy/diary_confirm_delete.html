@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Видалити запис{% endblock %}
+
+{% block content %}
+<h1>Видалити запис?</h1>
+
+<p>{{ entry.date }} — {{ entry.product|default:entry.dish }} ({{ entry.calories }} ккал)</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+</form>
+
+<a href="{% url 'diary' %}">Скасувати</a>
+{% endblock %}
