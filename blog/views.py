@@ -114,6 +114,14 @@ def search_panel(request):
         "dish_pag": dish_page_obj,
     })
 
+def dish_detail(request, dish_id):
+    dish = get_object_or_404(Dish, id=dish_id)
+    return render(request, "searchpanel/dish_detail.html", {"data": dish})
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, "searchpanel/product_detail.html", {"data": product})
+
 def error(request, rest):
     return render(request, "404.html")
 
