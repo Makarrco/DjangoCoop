@@ -1,92 +1,133 @@
-# Endearing Peace 🥗
- 
-A calorie tracking web application built with Django and PostgreSQL. Endearing Peace helps users log meals, monitor daily calorie intake, and manage personal health profiles (BMI, weight/nutrition goals).
- 
-## Table of Contents
- 
-- [About the Project](#about-the-project)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Team](#team)
-- [Project Structure](#project-structure)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+# Підрахунок калорій (DjangoCoop)
 
-## About the Project
- 
-Endearing Peace is a calorie and nutrition tracking platform. Users can register, set up a personal profile, log their meals, and track progress toward their health goals over time.
- 
-> 🚧 **Status:** Project is in early planning/setup stage. No code has been written yet — this README describes the intended scope and will evolve as development progresses.
- 
-## Features
- 
-- **User Authentication** — registration, login, logout, password management
-- **User Profiles** — height, weight, age, gender, activity level
-- **BMI Calculation** — automatic BMI calculation and category (underweight/normal/overweight/obese)
-- **Goal Setting** — target weight, daily calorie goal, macro goals (planned)
-- **Meal Logging** — add meals/food entries with calorie and nutrient info
-- **Daily Summary** — track total calories consumed vs. daily goal
-- **History** — view past days/weeks of logged data (planned)
-## Tech Stack
- 
-| Layer          | Technology       |
-|----------------|------------------|
-| Backend        | Django (Python)  |
-| Database       | PostgreSQL       |
-| Frontend       | Django Templates / HTML, CSS (TBD) |
-| Testing / QA   | Django Test Framework / pytest (TBD) |
-| Version Control | Git & GitHub    |
- 
-## Team
- 
-| Name  | Role                                  |
-|-------|----------------------------------------|
-| Volodymyr   | Project Manager, FullStack & QA   |
-| Makar | FullStack & QA                    |
+Вебдодаток на Django, у якому користувач шукає калорійність продуктів і страв,
+рахує свою орієнтовну денну норму калорій і веде щоденник харчування.
 
- 
-### Prerequisites
- 
-- Python 3.11+
-- PostgreSQL 14+
-- pip / virtualenv
+Проєкт — навчальна командна робота: Django MVT-архітектура (без React/окремого фронтенду),
+PostgreSQL на Railway, ручне тестування, Scrum-процес через Jira.
 
-## Project Structure
- 
+## Команда та ролі
+
+| Учасник | Роль | Зона відповідальності |
+|---|---|---|
+| **Makar** |  Project Manager / DevOps / FullstackDev / QA | налаштування репозиторію, Jira-беклог і спринти, деплой на Railway, підключення PostgreSQL, Реєстрація/вхід/вихід. Калькулятор денної норми (формула Мілфіна-Сан-Жеора + запобіжники). DiaryEntry — щоденник харчування, сума калорій, порівняння з нормою
+| **Volodymyr** | Team Lead / Backend Developer / FullstackDev / QA | Моделі: Category, Product, Dish (+ FK-зв'язки). Адмінка Django для наповнення каталогу (додати/змінити/видалити продукти та страви). Пошук, фільтр за категорією, пагінація в каталозі. Картка продукту/страви |
+
+## Стек технологій
+
+- **Backend:** Django 6.0 (MVT — шаблони, без окремого фронтенд-фреймворку)
+- **База даних:** PostgreSQL (Railway)
+- **Деплой:** Railway (gunicorn + whitenoise для статики)
+- **Задачі / Scrum:** Jira
+- **Контроль версій:** Git / GitHub
+
+## Структура проєкту
+
 ```
-endearing_peace/
-├── config/            # Django project settings
-├── users/             # Authentication & user profiles app
-├── nutrition/         # Meal logging & calorie tracking app
-├── templates/         # HTML templates
-├── static/            # CSS, JS, images
+DjangoCoop/
+├── core/                   # Django-проєкт: settings, root urls, wsgi/asgi
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── blog/                   # Основний застосунок
+│   ├── models.py           # UserProfile, DiaryEntry, Category, Product, Dish, DishIngredient
+│   ├── views.py            # Профіль, щоденник
+│   ├── auth_views.py       # Реєстрація, створення профілю
+│   ├── forms.py            # Форми реєстрації, профілю, щоденника, каталогу
+│   ├── admin.py            # Адмінка для наповнення каталогу
+│   ├── signals.py          # Автоперерахунок калорій страви при зміні інгредієнтів
+│   ├── templates/          # HTML-шаблони (Django Templates)
+│   └── static/              # CSS/статика застосунку
 ├── requirements.txt
-├── manage.py
-└── README.md
+├── Procfile                 # Команди запуску для Railway
+├── .env.example              # Приклад локальних змінних оточення
+└── manage.py
 ```
 
-## Roadmap
- 
-- [ ] Initialize Django project and PostgreSQL connection
-- [ ] Implement user authentication & profile model
-- [ ] Implement BMI calculation logic
-- [ ] Implement meal/food logging model & views
-- [ ] Implement daily calorie summary view
-- [ ] Add goal-setting functionality
-- [ ] Write unit/integration tests
-- [ ] Add history & reporting views
-- [ ] Deploy to production environment
-## Contributing
- 
-This is currently a 2-person project (Me & Makar). General workflow:
- 
-1. Create a feature branch (`git checkout -b feature/your-feature`)
-2. Commit your changes with clear messages
-3. Open a Pull Request for review
-4. Ensure QA/tests pass before merging
-## License
- 
-License to be determined.
- 
+## Функціонал (MVP)
 
+- [x] Реєстрація, вхід, вихід
+- [x] Особистий профіль (стать, вік, зріст, вага, активність, ціль)
+- [x] Розрахунок орієнтовної денної норми калорій (формула Міффліна–Сан-Жеора)
+      з попередженням "не медична порада" і безпечним нижнім порогом
+- [x] Каталог продуктів і страв з пошуком і фільтром за категорією
+- [x] Наповнення каталогу через адмінку Django
+- [x] Автоматичний розрахунок калорійності страви зі складу інгредієнтів
+- [x] Щоденник харчування: додавання записів, підрахунок калорій за день,
+      порівняння з денною нормою
+- [x] Приватність: кожен користувач бачить лише свій профіль і щоденник
+- [ ] Ручне тестування за повним списком сценаріїв
+- [ ] Графік калорій за період (розширення)
+- [ ] REST API (розширення, `djangorestframework` вже підключено)
+
+## Локальний запуск
+
+### 1. Клонування і залежності
+
+```bash
+git clone https://github.com/Makarrco/DjangoCoop.git
+cd DjangoCoop
+pip install -r requirements.txt
+```
+
+### 2. Змінні оточення
+
+Скопіюй приклад і заповни своїми значеннями:
+
+```bash
+cp .env.example .env
+```
+
+У `.env` мінімально потрібно:
+```
+SECRET_KEY=будь-який-довгий-рядок-для-розробки
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+```
+
+`DATABASE_URL` можна не задавати — тоді застосунок автоматично використає локальний SQLite.
+Для підключення до PostgreSQL на Railway див. розділ нижче.
+
+### 3. Міграції і запуск
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser   # для доступу до /admin/
+python manage.py runserver
+```
+
+Застосунок буде доступний на `http://127.0.0.1:8000/`.
+
+## Підключення до PostgreSQL (Railway)
+
+1. У Railway-проєкті відкрий сервіс **Postgres** → вкладка **Variables**
+2. Скопіюй значення `DATABASE_PUBLIC_URL` (для підключення ззовні, з локального компʼютера)
+3. Встав його у свій `.env` під ключем `DATABASE_URL`:
+   ```
+   DATABASE_URL=postgresql://...
+   ```
+4. Виконай `python manage.py migrate`
+
+Для самого Django-сервісу на Railway використовується **внутрішній** `DATABASE_URL`
+(`postgres.railway.internal`) — Railway підставляє його автоматично через
+Reference Variable, окремо налаштовувати не потрібно.
+
+## Деплой
+
+Деплой відбувається автоматично при `git push` у гілку, підключену до Railway.
+Послідовність:
+1. Railway збирає застосунок і встановлює залежності з `requirements.txt`
+2. Виконується `release: python manage.py migrate` (з `Procfile`)
+3. Запускається `web: gunicorn core.wsgi`
+
+## Ролі користувачів у застосунку
+
+- **Гість** — пошук у каталозі, перегляд калорійності, калькулятор норми
+- **Користувач** (зареєстрований) — усе, що гість, плюс профіль і щоденник харчування
+- **Адміністратор** (`is_staff=True`) — наповнення каталогу й керування користувачами через `/admin/`
+
+## Тестування
+
+Ручне тестування проводиться за сценаріями: реєстрація, пошук продукту,
+розрахунок норми, додавання запису в щоденник, підрахунок суми калорій за день,
+перевірка, що чужі дані (профіль/щоденник іншого користувача) недоступні.
