@@ -1,0 +1,45 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data.name }}</title>
+</head>
+<body>
+
+<h1>{{ data.name }}</h1>
+
+<p><strong>Category:</strong> {{ data.category.name }}</p>
+
+<table border="1">
+    <tr>
+        <th>Calories</th>
+        <td>{{ data.calories_per_100g }} kcal / 100g</td>
+    </tr>
+    <tr>
+        <th>Protein</th>
+        <td>{{ data.protein_per_100g }} g</td>
+    </tr>
+    <tr>
+        <th>Fat</th>
+        <td>{{ data.fat_per_100g }} g</td>
+    </tr>
+    <tr>
+        <th>Carbohydrates</th>
+        <td>{{ data.carbs_per_100g }} g</td>
+    </tr>
+</table>
+
+<h2>Used in Dishes</h2>
+
+<ul>
+    {% for dish in data.dishes.all %}
+        <li>{{ dish.name }}</li>
+    {% empty %}
+        <li>This product is not used in any dishes.</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

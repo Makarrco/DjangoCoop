@@ -4,7 +4,8 @@
     <div>
         <h3>Products</h3>
         {% for product in prod_pag %}
-            <p>{{ product.name }} — {{ product.calories_per_100g }} kcal/100g</p>
+            <p><a href="product/{{product.id}}">{{ product.name }}</a> — {{ product.calories_per_100g }}  kcal/100g</p>
+
         {% empty %}
             <p>No products found.</p>
         {% endfor %}
@@ -16,9 +17,13 @@
                 hx-swap="outerHTML"
                 hx-push-url="true">←</a>
         {% endif %}
-        <span class="current">
-            Page {{ prod_pag.number }} of {{ prod_pag.paginator.num_pages }}.
-        </span>
+        {% for page in prod_pag.paginator.page_range %}
+            {% if page == prod_pag.number %}
+                <strong><a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ page }}&dish_page={{ dish_pag.number }}">{{ page }}</a></strong>
+            {% else %}
+                <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ page }}&dish_page={{ dish_pag.number }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
         {% if prod_pag.has_next %}
         <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.next_page_number }}&dish_page={{ dish_pag.number }}"
             hx-boost="true"
@@ -31,7 +36,7 @@
     <div>
         <h3>Dishes</h3>
         {% for dish in dish_pag %}
-            <p>{{ dish.name }} — {{ dish.get_calories }} kcal</p>
+            <p><a href="dish/{{dish.id}}">{{ dish.name }}</a> — {{ dish.get_calories }} kcal</p>
         {% empty %}
             <p>No dishes found.</p>
         {% endfor %}
@@ -43,9 +48,13 @@
                 hx-swap="outerHTML"
                 hx-push-url="true">←</a>
         {% endif %}
-        <span class="current">
-            Page {{ dish_pag.number }} of {{ dish_pag.paginator.num_pages }}.
-        </span>
+        {% for page in dish_pag.paginator.page_range %}
+            {% if page == dish_pag.number %}
+                <strong><a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod.pag.number }}&dish_page={{ page }}">{{ page }}</a></strong>
+            {% else %}
+                <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod.pag.number }}&dish_page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
         {% if dish_pag.has_next %}
             <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ dish_pag.next_page_number }}"
                 hx-boost="true"
