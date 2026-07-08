@@ -44,7 +44,7 @@ urlpatterns = [
     path("seed_database/", views.seed_database),
     
     # Search
-    path("search/", views.search_panel, name="search"),
+    path("search/", views.search_panel, name="search_panel"),
     
     # Admin
     path("admin/", admin.site.urls),

@@ -1,19 +1,16 @@
-<form method="post">
-    {% csrf_token %}
-    {{form}}
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<form method="get"
+      hx-get="{% url 'search_panel' %}"
+      hx-trigger="keyup changed delay:400ms, change"
+      hx-target="#results"
+      hx-select="#results"
+      hx-swap="outerHTML"
+      hx-push-url="true">
+    {{ form }}
     <button type="submit">Search</button>
 </form>
 
-    <h3>Products</h3>
-    {% for product in products %}
-        <p>{{ product.name }} — {{ product.calories_per_100g }} kcal/100g</p>
-    {% empty %}
-        <p>No products found.</p>
-    {% endfor %}
+{% include "searchpanel/_result.html" %}
 
-    <h3>Dishes</h3>
-    {% for dish in dishes %}
-        <p>{{ dish.name }} — {{ dish.get_calories }} kcal</p>
-    {% empty %}
-        <p>No dishes found.</p>
-    {% endfor %}
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>

@@ -80,10 +80,11 @@ def diary_delete_view(request, pk):
 
 # @login_required
 def search_panel(request):
-    form = SearchForm(request.POST or None)
+    form = SearchForm(request.GET or None)
     products = Product.objects.none()
     dishes = Dish.objects.none()
     query = ""
+    category_id = ""
     if form.is_valid():
         query = form.cleaned_data["name"]
         category = form.cleaned_data["category"]
@@ -94,14 +95,22 @@ def search_panel(request):
             products = Product.objects.all()
             dishes = Dish.objects.all()        
         if category:
+            category_id = category.id
             products = products.filter(category__name__icontains=category)
-            dishes = dishes.filter(ingridients__category__name__icontains=category)
+            dishes = dishes.filter(ingridients__category__name__icontains=category).distinct()
+    prod_paginator = Paginator(products, 5)
+    dish_paginator = Paginator(dishes, 5)
+    page_prod_number = request.GET.get("prod_page")
+    page_dish_number = request.GET.get("dish_page")
+    prod_page_obj = prod_paginator.get_page(page_prod_number)
+    dish_page_obj = dish_paginator.get_page(page_dish_number)
         
     return render(request, "searchpanel/search.html", {
         "form": form,
         "query": query,
-        "products": products,
-        "dishes": dishes,
+        "category_id": category_id,
+        "prod_pag": prod_page_obj,
+        "dish_pag": dish_page_obj,
     })
 
 def error(request, rest):
