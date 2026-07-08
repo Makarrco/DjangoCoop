@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .forms import ProfileForm, DiaryEntryForm, SearchForm
 from .models import UserProfile, DiaryEntry, Dish, DishIngredient, Product, Category
@@ -75,6 +76,13 @@ def diary_delete_view(request, pk):
         entry.delete()
         return redirect("diary")
     return render(request, "diary/diary_confirm_delete.html", {"entry": entry})
+@login_required
+def dairy_search(request):
+    diary = get_object_or_404(DiaryEntry, uer=request.user)
+    q= request.GET.get("q")
+    if q:
+        diary = diary.filter(Q(dish__name__icontains=q) | Q(created_at__name__icontains=q) | Q(product__name__icontains=q))
+    return render(request, "diary/diary.html", {"entries": diary})
 
 ####### Volodymur
 

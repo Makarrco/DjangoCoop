@@ -1,1 +1,17 @@
-page's not found
+{% extends "base.html" %}
+
+{% block title %}404{% endblock %}
+
+{% block content %}
+
+<h1>404</h1>
+
+<p>На жаль, сторінку не знайдено.</p>
+
+<p>
+    <a href="{% url 'home' %}">
+        ← Повернутися на головну
+    </a>
+</p>
+
+{% endblock %}
