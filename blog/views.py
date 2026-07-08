@@ -41,7 +41,16 @@ def profile_edit_view(request):
 
 @login_required
 def diary_view(request):
-    entries = DiaryEntry.objects.filter(user=request.user).select_related("product", "dish")
+    entries = DiaryEntry.objects.filter(
+        user=request.user
+    ).select_related("product", "dish")
+    q = request.GET.get("q")
+    if q:
+        entries = entries.filter(
+            Q(product__name__icontains=q) |
+            Q(dish__name__icontains=q) |
+            Q(date__icontains=q)
+        )
     daily_totals = {}
     for entry in entries:
         daily_totals.setdefault(entry.date, 0)
@@ -50,9 +59,14 @@ def diary_view(request):
     if hasattr(request.user, "profile"):
         norm = request.user.profile.calculate_daily_norm()
 
-    return render(request,
+    return render(
+        request,
         "diary/diary.html",
-        {"entries": entries, "daily_totals": daily_totals, "norm": norm},
+        {
+            "entries": entries,
+            "daily_totals": daily_totals,
+            "norm": norm,
+        },
     )
 @login_required
 def diary_add_view(request):
@@ -76,13 +90,7 @@ def diary_delete_view(request, pk):
         entry.delete()
         return redirect("diary")
     return render(request, "diary/diary_confirm_delete.html", {"entry": entry})
-@login_required
-def dairy_search(request):
-    diary = get_object_or_404(DiaryEntry, uer=request.user)
-    q= request.GET.get("q")
-    if q:
-        diary = diary.filter(Q(dish__name__icontains=q) | Q(created_at__name__icontains=q) | Q(product__name__icontains=q))
-    return render(request, "diary/diary.html", {"entries": diary})
+
 
 ####### Volodymur
 

@@ -4,11 +4,12 @@
 {% block content %}
 <h1>Щоденник харчування</h1>
 
+<div class="diary-toolbar">
+    <a href="{% url 'diary_add' %}" class="add-entry-btn">
+        + Додати запис
+    </a>
 
-
-<div class="search-bar">
-    <a href="{% url 'diary_add' %}">+ Додати запис</a>
-    <form method="GET">
+    <form method="GET" class="search-form">
         <input
             type="text"
             name="q"
@@ -19,14 +20,10 @@
     </form>
 </div>
 
-{% if norm.calories %}
-    <p>Денна норма: <strong>{{ norm.calories }} ккал</strong></p>
-{% endif %}
-
 {% if not entries %}
     <p>Записів поки немає.</p>
 {% else %}
-    <table border="1" cellpadding="6">
+    <table>
         <thead>
             <tr>
                 <th>Дата</th>
@@ -43,25 +40,25 @@
                 <td>{{ entry.product|default:entry.dish }}</td>
                 <td>{{ entry.amount_grams }}</td>
                 <td>{{ entry.calories }}</td>
-                <td>
-                    <a href="{% url 'diary_delete' entry.pk %}">Видалити</a>
-                </td>
+                <td><a href="{% url 'diary_delete' entry.pk %}">Видалити</a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
     <h2>Підсумки за день</h2>
-    <ul>
     {% for date, total in daily_totals.items %}
-        <li>
-            {{ date }}: {{ total }} ккал
+        <div class="card">
+            <strong>{{ date }}</strong> — {{ total }} ккал
             {% if norm.calories %}
                 з {{ norm.calories }} ккал
-                ({% widthratio total norm.calories 100 %}%)
+                <div class="progress-track">
+                    <div class="progress-fill{% if total > norm.calories %} is-over{% endif %}"
+                         style="width: {% widthratio total norm.calories 100 %}%; max-width: 100%;"></div>
+                </div>
+                <span class="progress-label">{% widthratio total norm.calories 100 %}% від норми</span>
             {% endif %}
-        </li>
+        </div>
     {% endfor %}
-    </ul>
 {% endif %}
 {% endblock %}
