@@ -41,7 +41,7 @@ urlpatterns = [
     path("diary/", views.diary_view, name="diary"),
     path("diary/add/", views.diary_add_view, name="diary_add"),
     path("diary/<int:pk>/delete/", views.diary_delete_view, name="diary_delete"),
-    # path("seed_database/", views.seed_database),
+    path("seed_database/", views.seed_database),
     
     # Search
     path("search/dish/<int:dish_id>", views.dish_detail),

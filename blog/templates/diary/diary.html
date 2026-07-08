@@ -4,7 +4,20 @@
 {% block content %}
 <h1>Щоденник харчування</h1>
 
-<a href="{% url 'diary_add' %}">+ Додати запис</a>
+
+
+<div class="search-bar">
+    <a href="{% url 'diary_add' %}">+ Додати запис</a>
+    <form method="GET">
+        <input
+            type="text"
+            name="q"
+            placeholder="Пошук продукту, страви або дати..."
+            value="{{ request.GET.q }}"
+        >
+        <button type="submit">Пошук</button>
+    </form>
+</div>
 
 {% if norm.calories %}
     <p>Денна норма: <strong>{{ norm.calories }} ккал</strong></p>
