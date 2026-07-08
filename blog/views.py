@@ -40,7 +40,6 @@ def profile_edit_view(request):
 
 @login_required
 def diary_view(request):
-    """Список записів ЛИШЕ поточного користувача + підсумки за день."""
     entries = DiaryEntry.objects.filter(user=request.user).select_related("product", "dish")
     daily_totals = {}
     for entry in entries:
