@@ -81,5 +81,5 @@ DishIngredientFormSet = forms.inlineformset_factory(
 )
 
 class SearchForm(forms.Form):
-    name = forms.CharField(required=False)
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="All categories")
+    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Пошук продукту або страви...'}))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="Усі категрії")

@@ -2,22 +2,37 @@
 {% block title %}Щоденник харчування{% endblock %}
 
 {% block content %}
+
 <h1>Щоденник харчування</h1>
 
-<div class="diary-toolbar">
-    <a href="{% url 'diary_add' %}" class="add-entry-btn">
-        + Додати запис
-    </a>
+    <h2>Підсумки за день</h2>
+    {% for date, total in daily_totals.items %}
+        <div class="card">
+            <strong>{{ date }}</strong> — {{ total }} ккал
+            {% if norm.calories %}
+                з {{ norm.calories }} ккал
+                <div class="progress-track">
+                    <div class="progress-fill{% if total > norm.calories %} is-over{% endif %}"
+                         style="width: {% widthratio total norm.calories 100 %}%; max-width: 100%;"></div>
+                </div>
+                <span class="progress-label">{% widthratio total norm.calories 100 %}% від норми</span>
+            {% endif %}
+        </div>
+    {% endfor %}
 
-    <form method="GET" class="search-form">
-        <input
-            type="text"
-            name="q"
-            placeholder="Пошук продукту, страви або дати..."
-            value="{{ request.GET.q }}"
-        >
-        <button type="submit">Пошук</button>
-    </form>
+<div class="diary-container">
+    <div id="search-panel-container"
+         hx-get="{% url 'search_panel' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+    </div>
+    <div class="diary-toolbar">
+        <form method="GET" class="search-form">
+            <input type="text" name="q" placeholder="Пошук продукту, страви або дати..." value="{{ request.GET.q }}">
+            <button type="submit">Пошук</button>
+        </form>
+        <a href="{% url 'diary_add' %}" class="add-entry-btn">+ Додати запис</a>
+    </div>
 </div>
 
 {% if not entries %}
@@ -45,20 +60,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <h2>Підсумки за день</h2>
-    {% for date, total in daily_totals.items %}
-        <div class="card">
-            <strong>{{ date }}</strong> — {{ total }} ккал
-            {% if norm.calories %}
-                з {{ norm.calories }} ккал
-                <div class="progress-track">
-                    <div class="progress-fill{% if total > norm.calories %} is-over{% endif %}"
-                         style="width: {% widthratio total norm.calories 100 %}%; max-width: 100%;"></div>
-                </div>
-                <span class="progress-label">{% widthratio total norm.calories 100 %}% від норми</span>
-            {% endif %}
-        </div>
-    {% endfor %}
 {% endif %}
 {% endblock %}

@@ -96,7 +96,7 @@ def diary_delete_view(request, pk):
 
 # @login_required
 def search_panel(request):
-    form = SearchForm(request.GET or None)
+    form = SearchForm(request.GET)
     products = Product.objects.none()
     dishes = Dish.objects.none()
     query = ""

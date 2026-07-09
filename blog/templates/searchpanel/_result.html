@@ -1,67 +1,63 @@
-{%load static%}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<div id="results" style="display: flex; gap: 20px">
-    <div>
+<div id="results" class="results">
+    <div class="results-column">
         <h3>Products</h3>
-        {% for product in prod_pag %}
-            <p><a href="product/{{product.id}}">{{ product.name }}</a> — {{ product.calories_per_100g }}  kcal/100g</p>
-
-        {% empty %}
-            <p>No products found.</p>
-        {% endfor %}
-        {% if prod_pag.has_previous %}
-            <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.previous_page_number }}&dish_page={{ dish_pag.number }}"
-                hx-boost="true"
-                hx-target="#results"
-                hx-select="#results"
-                hx-swap="outerHTML"
-                hx-push-url="true">←</a>
-        {% endif %}
-        {% for page in prod_pag.paginator.page_range %}
-            {% if page == prod_pag.number %}
-                <strong><a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ page }}&dish_page={{ dish_pag.number }}">{{ page }}</a></strong>
-            {% else %}
-                <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ page }}&dish_page={{ dish_pag.number }}">{{ page }}</a>
+        <div class="results-grid">
+            {% for product in prod_pag %}
+                <a href="{% url 'product_detail' product.id %}" class="result-card">
+                    <span class="result-card__name">{{ product.name }}</span>
+                    <span class="result-card__value">{{ product.calories_per_100g }} <small>kcal/100g</small></span>
+                </a>
+            {% empty %}
+                <p class="results-empty">No products found.</p>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            {% if prod_pag.has_previous %}
+                <a class="pagination__link"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.previous_page_number }}&dish_page={{ dish_pag.number }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">←</a>
             {% endif %}
-        {% endfor %}
-        {% if prod_pag.has_next %}
-        <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.next_page_number }}&dish_page={{ dish_pag.number }}"
-            hx-boost="true"
-            hx-target="#results"
-            hx-select="#results"
-            hx-swap="outerHTML"
-            hx-push-url="true">→</a>
-        {% endif %}
+            {% for page in prod_pag.paginator.page_range %}
+                <a class="pagination__link{% if page == prod_pag.number %} is-active{% endif %}"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ page }}&dish_page={{ dish_pag.number }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">{{ page }}</a>
+            {% endfor %}
+            {% if prod_pag.has_next %}
+                <a class="pagination__link"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.next_page_number }}&dish_page={{ dish_pag.number }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">→</a>
+            {% endif %}
+        </div>
     </div>
-    <div>
+
+    <div class="results-column">
         <h3>Dishes</h3>
-        {% for dish in dish_pag %}
-            <p><a href="dish/{{dish.id}}">{{ dish.name }}</a> — {{ dish.get_calories }} kcal</p>
-        {% empty %}
-            <p>No dishes found.</p>
-        {% endfor %}
-        {% if dish_pag.has_previous %}
-            <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ dish_pag.previous_page_number }}"
-                hx-boost="true"
-                hx-target="#results"
-                hx-select="#results"
-                hx-swap="outerHTML"
-                hx-push-url="true">←</a>
-        {% endif %}
-        {% for page in dish_pag.paginator.page_range %}
-            {% if page == dish_pag.number %}
-                <strong><a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod.pag.number }}&dish_page={{ page }}">{{ page }}</a></strong>
-            {% else %}
-                <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod.pag.number }}&dish_page={{ page }}">{{ page }}</a>
+        <div class="results-grid">
+            {% for dish in dish_pag %}
+                <a href="{% url 'dish_detail' dish.id %}" class="result-card">
+                    <span class="result-card__name">{{ dish.name }}</span>
+                    <span class="result-card__value">{{ dish.get_calories }} <small>kcal</small></span>
+                </a>
+            {% empty %}
+                <p class="results-empty">No dishes found.</p>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            {% if dish_pag.has_previous %}
+                <a class="pagination__link"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ dish_pag.previous_page_number }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">←</a>
             {% endif %}
-        {% endfor %}
-        {% if dish_pag.has_next %}
-            <a href="?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ dish_pag.next_page_number }}"
-                hx-boost="true"
-                hx-target="#results"
-                hx-select="#results"
-                hx-swap="outerHTML"
-                hx-push-url="true">→</a>
-        {% endif %}
+            {% for page in dish_pag.paginator.page_range %}
+                <a class="pagination__link{% if page == dish_pag.number %} is-active{% endif %}"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ page }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">{{ page }}</a>
+            {% endfor %}
+            {% if dish_pag.has_next %}
+                <a class="pagination__link"
+                   href="{% url 'search_panel' %}?name={{ query|urlencode }}&category={{ category_id }}&prod_page={{ prod_pag.number }}&dish_page={{ dish_pag.next_page_number }}"
+                   hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true">→</a>
+            {% endif %}
+        </div>
     </div>
 </div>

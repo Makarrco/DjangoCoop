@@ -44,8 +44,8 @@ urlpatterns = [
     path("seed_database/", views.seed_database),
     
     # Search
-    path("search/dish/<int:dish_id>", views.dish_detail),
-    path("search/product/<int:product_id>", views.product_detail),
+    path("search/dish/<int:dish_id>", views.dish_detail, name="dish_detail"),
+    path("search/product/<int:product_id>", views.product_detail, name="product_detail"),
     path("search/", views.search_panel, name="search_panel"),
     
     # Admin

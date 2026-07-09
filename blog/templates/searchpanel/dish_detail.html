@@ -1,5 +1,7 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% extends "base.html" %}
+{% block title %}Деталі страви{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,3 +47,4 @@
 
 </body>
 </html>
+{% endblock %}
