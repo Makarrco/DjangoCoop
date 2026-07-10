@@ -44,9 +44,18 @@ urlpatterns = [
     path("seed_database/", views.seed_database),
     
     # Search
-    path("search/dish/<int:dish_id>", views.dish_detail, name="dish_detail"),
-    path("search/product/<int:product_id>", views.product_detail, name="product_detail"),
+    path("search/dish/<int:dish_id>/", views.dish_detail, name="dish_detail"),
+    path("search/product/<int:product_id>/", views.product_detail, name="product_detail"),
     path("search/", views.search_panel, name="search_panel"),
+    
+    # api
+    
+    path("api/products/id/<int:id>/", views.product_detail),
+    path("api/products/", views.products),
+    path("api/dishes/", views.dishes),
+    path("api/diary/", views.get_entries),
+    path("api/diary/create/", views.create_entry),
+    
     
     # Admin
     path("admin/", admin.site.urls),

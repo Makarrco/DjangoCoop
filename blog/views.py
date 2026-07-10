@@ -8,7 +8,12 @@ from .models import UserProfile, DiaryEntry, Dish, DishIngredient, Product, Cate
 from django.http import HttpResponse
 from django.db import transaction
 from django.core.paginator import Paginator
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from .serializers import ProductSerializer, DishSerializer, DiaryEntrySerializer
+from rest_framework import status
+from datetime import datetime
 
 def home_view(request):
     return render(request, "home.html")
@@ -288,3 +293,74 @@ def seed_database(request):
         f"Блюд створено: {created['dishes']}<br>"
         f"Інгредієнтів створено: {created['ingredients']}"
     )
+    
+# REST API
+
+@api_view(["GET"])
+def products(request):
+    products = Product.objects.all()
+    
+    q = request.GET.get("q")
+    if q:
+        products = products.filter(
+            Q(name__icontains=q) |
+            Q(category__name__icontains=q)
+        )
+    
+    paginator = PageNumberPagination()
+    paginator.page_size = 5
+    
+    paginated_products = paginator.paginate_queryset(products, request)
+    
+    ps = ProductSerializer(paginated_products, many=True)
+    return Response(ps.data)
+
+@api_view(["GET"])
+def product_detail(request, id):
+    products =get_object_or_404(Product, id=id)
+    
+    ps = ProductSerializer(products)
+    return Response(ps.data)
+
+@api_view(["GET"])
+def dishes(request):
+    dishes = Dish.objects.all()
+    
+    paginator = PageNumberPagination()
+    paginator.page_size = 5
+    
+    paginated_dishes = paginator.paginate_queryset(dishes, request)
+    
+    ds = DishSerializer(paginated_dishes, many=True)
+    
+    return Response(ds.data)
+
+@api_view(["GET"])
+def get_entries(request):
+    date = request.GET.get("date")
+    entries = DiaryEntry.objects.all()
+    
+    if not date:
+        ds = DiaryEntrySerializer(entries, many=True)
+        return Response(ds.data)
+    
+    try:
+        parsed_date = datetime.strptime(date, "%d.%m.%Y").date()
+    except ValueError:
+        return Response(
+            {"error": "Невірний формат дати. Очікується DD.MM.YYYY"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+        
+    entries = entries.filter(date=parsed_date, user=request.user)
+    
+    ds = DiaryEntrySerializer(entries, many=True)
+    return Response(ds.data)
+
+@api_view(["POST"])
+def create_entry(request):
+    es = DiaryEntrySerializer(data=request.data)
+    if es.is_valid():
+        es.save(user=request.user)
+        return Response(es.data)
+    return Response(es.errors)
