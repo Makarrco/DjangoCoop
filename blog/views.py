@@ -125,8 +125,13 @@ def search_panel(request):
     page_dish_number = request.GET.get("dish_page")
     prod_page_obj = prod_paginator.get_page(page_prod_number)
     dish_page_obj = dish_paginator.get_page(page_dish_number)
-        
-    return render(request, "searchpanel/search.html", {
+    
+    if request.headers.get("HX-Request"):
+        template = "searchpanel/search.html"
+    else:
+        template = "searchpanel/searchmain.html"
+    
+    return render(request, template, {
         "form": form,
         "query": query,
         "category_id": category_id,
