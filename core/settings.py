@@ -22,7 +22,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,djangocoop-production.up.railway.app').split(',')
 # На Railway задай через Variables, наприклад:
 # ALLOWED_HOSTS=127.0.0.1,localhost,your-app.up.railway.app
 
