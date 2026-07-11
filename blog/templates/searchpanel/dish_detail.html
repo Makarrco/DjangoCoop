@@ -2,49 +2,38 @@
 {% block title %}Деталі страви{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ data.name }}</title>
-</head>
-<body>
-
 <h1>{{ data.name }}</h1>
-
 <p>{{ data.description }}</p>
-
 <p><strong>Calories:</strong> {{ data.get_calories }} kcal</p>
 
 <h2>Ingredients</h2>
 
-<table border="1">
-    <tr>
-        <th>Product</th>
-        <th>Weight (g)</th>
-        <th>Calories / 100g</th>
-        <th>Protein</th>
-        <th>Fat</th>
-        <th>Carbs</th>
-    </tr>
-
+<div class="table-scroll">
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Weight (g)</th>
+            <th>Calories / 100g</th>
+            <th>Protein</th>
+            <th>Fat</th>
+            <th>Carbs</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for ingredient in data.dishingredients.all %}
-    <tr>
-        <td>{{ ingredient.product.name }}</td>
-        <td>{{ ingredient.weight_grams }}</td>
-        <td>{{ ingredient.product.calories_per_100g }}</td>
-        <td>{{ ingredient.product.protein_per_100g }}</td>
-        <td>{{ ingredient.product.fat_per_100g }}</td>
-        <td>{{ ingredient.product.carbs_per_100g }}</td>
-    </tr>
+        <tr>
+            <td>{{ ingredient.product.name }}</td>
+            <td>{{ ingredient.weight_grams }}</td>
+            <td>{{ ingredient.product.calories_per_100g }}</td>
+            <td>{{ ingredient.product.protein_per_100g }}</td>
+            <td>{{ ingredient.product.fat_per_100g }}</td>
+            <td>{{ ingredient.product.carbs_per_100g }}</td>
+        </tr>
     {% empty %}
-    <tr>
-        <td colspan="6">No ingredients.</td>
-    </tr>
+        <tr><td colspan="6">No ingredients.</td></tr>
     {% endfor %}
-
+    </tbody>
 </table>
-
-</body>
-</html>
+</div>
 {% endblock %}

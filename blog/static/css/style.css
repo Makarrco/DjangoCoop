@@ -242,23 +242,6 @@ main {
 .search-form button{
     white-space:nowrap;
 }
-
-@media (max-width:640px){
-
-    .diary-toolbar{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .search-form{
-        width:100%;
-    }
-
-    .search-form input{
-        width:100%;
-    }
-}
-
 /* --- Progress bar (daily value style) --- */
 
 .progress-track {
@@ -391,9 +374,41 @@ ul.messages li {
 }
 .diary-container {
   display: flex;
-  gap: 20px;
+  gap: 2rem;
   align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
 }
+
+.card-block {
+  background: var(--white);
+  border: 1px solid var(--line-soft);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.card-block__title {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  border-bottom: 3px solid var(--line);
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.entry-block {
+  flex: 1 1 340px;
+  min-width: 280px;
+  border-top: 6px solid var(--mustard);
+}
+.entry-block form { max-width: none; }
+
+.search-block {
+  flex: 2 1 420px;
+  min-width: 300px;
+  border-top: 6px solid var(--sage);
+}
+
 /* ===== Search results ===== */
 
 .results {
@@ -401,29 +416,31 @@ ul.messages li {
   gap: 2rem;
   flex-wrap: wrap;
   margin: 1.5rem 0;
+  min-width: 0;
 }
 
 .results-column {
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* критично: без этого flex-элемент не сжимается меньше content width */
 }
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 0.75rem;
   margin: 0.75rem 0;
+  min-width: 0;
 }
 
 .result-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 92px;
+  height: 68px;
   background: var(--white);
   border: 1px solid var(--line);
   border-left: 6px solid var(--mustard);
-  padding: 0.7rem 0.9rem;
+  padding: 0.5rem 0.75rem;
   text-decoration: none;
   color: var(--ink);
   overflow: hidden;
@@ -533,32 +550,70 @@ ul.messages li {
   flex-shrink: 0;
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.25rem 0;
+}
+.table-scroll table { margin: 0; min-width: 480px; }
+
+/* --- 900px --- */
 @media (max-width: 900px) {
-  .search-panel-form {
-    flex-wrap: wrap;
-  }
-  .search-fields {
-    flex-wrap: wrap;
-  }
+  .search-panel-form { flex-wrap: wrap; }
+  .search-fields { flex-wrap: wrap; }
+  .facts-panel { max-width: 100%; }
+  .results-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }
 
-@media (max-width: 640px) {
-  .search-panel-form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .search-fields {
-    flex-direction: column;
-  }
-  .search-field {
-    flex: 1 1 auto;
-  }
-}
-/* --- Responsive --- */
-
+/* --- 640px --- */
 @media (max-width: 640px) {
   h1 { font-size: 2rem; }
-  .facts-panel { max-width: 100%; }
+  h2 { font-size: 1.4rem; }
+
   .site-nav { padding: 0.85rem 1rem; }
+  .site-nav__links { gap: 0.9rem; }
   main { padding: 1.75rem 1rem 3rem; }
+
+  .diary-toolbar { flex-direction: column; align-items: stretch; min-width: 0; }
+  .search-form { width: 100%; }
+  .search-form input { width: 100%; }
+
+  .diary-container { gap: 1rem; }
+
+  .facts-panel { padding: 1rem 1.1rem 1.25rem; }
+  .facts-panel__big { font-size: 2.4rem; }
+
+  .search-panel-form { flex-direction: column; align-items: stretch; }
+  .search-fields { flex-direction: column; }
+  .search-field { flex: 1 1 auto; }
+
+  .results { flex-direction: column; gap: 1.25rem; }
+  .results-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+
+  .pagination { gap: 0.3rem; }
+
+  form { max-width: 100%; }
+
+  /* карточки в .card (щоденник, дневные итоги) на всю ширину без изменений — уже 100% */
+}
+
+/* --- 400px --- */
+@media (max-width: 400px) {
+  h1 { font-size: 1.7rem; }
+  .facts-panel__big { font-size: 2rem; }
+  .facts-panel__title { font-size: 1.6rem; }
+
+  .result-card { height: 60px; padding: 0.4rem 0.6rem; }
+  .result-card__name { font-size: 0.85rem; }
+  .result-card__value { font-size: 0.95rem; }
+  .results-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem; }
+
+  .pagination__link { width: 28px; height: 28px; font-size: 0.78rem; }
+
+  .site-nav .brand { font-size: 1.2rem; }
+  .site-nav a, .site-nav button { font-size: 0.85rem; }
 }

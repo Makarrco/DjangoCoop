@@ -20,12 +20,6 @@
         </div>
     {% endfor %}
 
-<div class="diary-container">
-    <div id="search-panel-container"
-         hx-get="{% url 'search_panel' %}"
-         hx-trigger="load"
-         hx-swap="innerHTML">
-    </div>
     <div class="diary-toolbar">
         <form method="GET" class="search-form">
             <input type="text" name="q" placeholder="Пошук продукту, страви або дати..." value="{{ request.GET.q }}">
@@ -33,32 +27,33 @@
         </form>
         <a href="{% url 'diary_add' %}" class="add-entry-btn">+ Додати запис</a>
     </div>
-</div>
 
 {% if not entries %}
     <p>Записів поки немає.</p>
 {% else %}
-    <table>
-        <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Продукт / страва</th>
-                <th>Кількість (г)</th>
-                <th>Калорії</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entry in entries %}
-            <tr>
-                <td>{{ entry.date }}</td>
-                <td>{{ entry.product|default:entry.dish }}</td>
-                <td>{{ entry.amount_grams }}</td>
-                <td>{{ entry.calories }}</td>
-                <td><a href="{% url 'diary_delete' entry.pk %}">Видалити</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Продукт / страва</th>
+                    <th>Кількість (г)</th>
+                    <th>Калорії</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.product|default:entry.dish }}</td>
+                    <td>{{ entry.amount_grams }}</td>
+                    <td>{{ entry.calories }}</td>
+                    <td><a href="{% url 'diary_delete' entry.pk %}">Видалити</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endif %}
 {% endblock %}

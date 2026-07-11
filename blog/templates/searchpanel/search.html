@@ -5,16 +5,13 @@
       hx-select="#results"
       hx-swap="outerHTML"
       hx-push-url="true">
-    <class="search-panel-form">
-    <div class="search-fields">
-        <div class="search-field">
+    <div class="search-panel-form">
+        <div class="search-fields">
             {{ form.name }}
-        </div>
-        <div class="search-field">
             {{ form.category }}
         </div>
     </div>
-    <button type="submit">ПОШУК</button>
+    {% comment %} <button type="submit">ПОШУК</button> {% endcomment %}
 </form>
 
 {% include "searchpanel/_result.html" %}
