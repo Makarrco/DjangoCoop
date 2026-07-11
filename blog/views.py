@@ -316,7 +316,7 @@ def products(request):
     return Response(ps.data)
 
 @api_view(["GET"])
-def product_detail(request, id):
+def api_product_detail(request, id):
     products =get_object_or_404(Product, id=id)
     
     ps = ProductSerializer(products)

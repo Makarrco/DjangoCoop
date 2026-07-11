@@ -50,7 +50,7 @@ urlpatterns = [
     
     # api
     
-    path("api/products/id/<int:id>/", views.product_detail),
+    path("api/products/id/<int:id>/", views.api_product_detail),
     path("api/products/", views.products),
     path("api/dishes/", views.dishes),
     path("api/diary/", views.get_entries),
