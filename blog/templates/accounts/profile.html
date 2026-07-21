@@ -1,48 +1,48 @@
 {% extends "base.html" %}
-{% block title %}Мій профіль{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>Мій профіль</h1>
+<h1>Profile</h1>
 
 <div class="facts-panel">
     <div class="facts-panel__title">Nutrition Facts</div>
 
     <div class="facts-panel__row">
-        <span>Стать</span>
+        <span>Sex</span>
         <span class="facts-panel__value">{{ profile.get_gender_display }}</span>
     </div>
     <div class="facts-panel__row">
-        <span>Вік</span>
+        <span>Age</span>
         <span class="facts-panel__value">{{ profile.age }}</span>
     </div>
     <div class="facts-panel__row">
-        <span>Зріст</span>
+        <span>Height</span>
         <span class="facts-panel__value">{{ profile.height_cm }} см</span>
     </div>
     <div class="facts-panel__row">
-        <span>Вага</span>
+        <span>Weight</span>
         <span class="facts-panel__value">{{ profile.weight_kg }} кг</span>
     </div>
     <div class="facts-panel__row">
-        <span>Активність</span>
+        <span>Activity level</span>
         <span class="facts-panel__value">{{ profile.get_activity_level_display }}</span>
     </div>
     <div class="facts-panel__row">
-        <span>Ціль</span>
+        <span>Goal</span>
         <span class="facts-panel__value">{{ profile.get_goal_display }}</span>
     </div>
 
     <hr class="facts-panel__thick-rule">
 
-    <strong>Денна норма</strong>
+    <strong>Dailt allowence</strong>
     {% if norm.calories %}
         <div class="facts-panel__big">{{ norm.calories }}<span style="font-size:1.2rem;">ккал</span></div>
     {% else %}
-        <p style="font-size:0.9rem;">Норму не показано — див. попередження нижче.</p>
+        <p style="font-size:0.9rem;">Allowence not showed — look to the warning.</p>
     {% endif %}
 </div>
 
 <p class="alert{% if norm.is_safe %} alert--safe{% endif %}">⚠️ {{ norm.warning }}</p>
 
-<a href="{% url 'profile_edit' %}">Редагувати профіль</a>
+<a href="{% url 'profile_edit' %}">Profile editing</a>
 {% endblock %}

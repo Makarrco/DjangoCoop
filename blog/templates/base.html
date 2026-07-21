@@ -4,27 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Підрахунок калорій{% endblock %}</title>
+    <title>{% block title %}Calories count{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 </head>
 <body>
     <header class="site-header">
         <nav class="site-nav">
-            <a href="{% url 'home' %}" class="brand">Калорії</a>
+            <a href="{% url 'home' %}" class="brand">Calories</a>
             <div class="site-nav__links">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'search_panel' %}">Пошук</a>
-                    <a href="{% url 'profile' %}">Профіль</a>
-                    <a href="{% url 'diary' %}">Щоденник</a>
+                    <a href="{% url 'search_panel' %}">Search</a>
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="{% url 'diary' %}">Diary</a>
                     <form action="{% url 'logout' %}" method="post" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit">Вийти ({{ user.username }})</button>
+                        <button type="submit">Log out ({{ user.username }})</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'search_panel' %}">Пошук</a>
-                    <a href="{% url 'login' %}">Увійти</a>
-                    <a href="{% url 'register' %}">Реєстрація</a>
+                    <a href="{% url 'search_panel' %}">Search</a>
+                    <a href="{% url 'login' %}">Log in</a>
+                    <a href="{% url 'register' %}">Sing in</a>
                 {% endif %}
             </div>
         </nav>

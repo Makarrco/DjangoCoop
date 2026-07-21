@@ -2,12 +2,12 @@
 {% block title %}Головна{% endblock %}
 
 {% block content %}
-<h1>Підрахунок калорій</h1>
-<p>Ласкаво просимо! Знаходьте калорійність продуктів, рахуйте денну норму і ведіть щоденник харчування.</p>
+<h1>Calories count</h1>
+<p>Welcome! Find products calories, create your nutrition plan and use your daily dairy.</p>
 
 {% if not user.is_authenticated %}
-    <p><a href="{% url 'register' %}">Зареєструватися</a> або <a href="{% url 'login' %}">увійти</a>, щоб почати вести щоденник.</p>
+    <p><a href="{% url 'register' %}">Sing in</a> or <a href="{% url 'login' %}">Log in</a>, for starting your diary .</p>
 {% else %}
-    <p><a href="{% url 'diary' %}">Перейти до щоденника</a></p>
+    <p><a href="{% url 'diary' %}">Go to diary</a></p>
 {% endif %}
 {% endblock %}

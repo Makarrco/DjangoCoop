@@ -16,10 +16,10 @@ class RegisterForm(UserCreationForm):
         return user
 
 class DiaryEntryForm(forms.ModelForm):
-    """Форма додавання запису в щоденник.
-    ВАЖЛИВО: поле 'user' навмисно НЕМАЄ у fields — власника ставить view
-    з request.user (form.save(commit=False) -> instance.user = request.user),
-    інакше можна підсунути чужий user_id через приховане поле форми.
+    """Form for adding an entry to the journal.
+    IMPORTANT: The 'user' field is intentionally NOT included in the fields—the view sets the owner
+    using request.user (form.save(commit=False) -> instance.user = request.user),
+    otherwise it would be possible to inject a foreign user_id via a hidden form field.
     """
 
     class Meta:
@@ -35,9 +35,9 @@ class DiaryEntryForm(forms.ModelForm):
         dish = cleaned_data.get("dish")
 
         if not product and not dish:
-            raise forms.ValidationError("Оберіть продукт або страву.")
+            raise forms.ValidationError("Select a product or dish.")
         if product and dish:
-            raise forms.ValidationError("Оберіть щось одне: або продукт, або страву.")
+            raise forms.ValidationError("Choose one: either a product or a dish.")
 
         return cleaned_data
     
@@ -81,5 +81,5 @@ DishIngredientFormSet = forms.inlineformset_factory(
 )
 
 class SearchForm(forms.Form):
-    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Пошук продукту або страви...'}))
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="Усі категрії")
+    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Search for a product or dish...'}))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label="All categories")

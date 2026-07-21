@@ -1,29 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Додати запис{% endblock %}
+{% block title %}Add an entry{% endblock %}
 
 {% block content %}
-<h1>Додати запис у щоденник</h1>
+<h1>Add an entry to diary</h1>
 
 <div class="diary-container">
     <section class="card-block entry-block">
-        <h2 class="card-block__title">Новий запис</h2>
+        <h2 class="card-block__title">New entry</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Додати</button>
+            <button type="submit">Add</button>
         </form>
     </section>
 
     <section class="card-block search-block">
-        <h2 class="card-block__title">Пошук продукту / страви</h2>
+        <h2 class="card-block__title">Search for products / dish</h2>
         <div id="search-panel-container"
              hx-get="{% url 'search_panel' %}"
              hx-trigger="load"
              hx-swap="innerHTML">
-            <p class="results-empty">Завантаження…</p>
+            <p class="results-empty">Loading...</p>
         </div>
     </section>
 </div>
 
-<a href="{% url 'diary' %}">← Назад до щоденника</a>
+<a href="{% url 'diary' %}">← Back to diary</a>
 {% endblock %}

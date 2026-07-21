@@ -1,44 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Щоденник харчування{% endblock %}
+{% block title %}Nutrition diary{% endblock %}
 
 {% block content %}
 
-<h1>Щоденник харчування</h1>
+<h1>Nutrition diary</h1>
 
-    <h2>Підсумки за день</h2>
+    <h2>Daily results</h2>
     {% for date, total in daily_totals.items %}
         <div class="card">
-            <strong>{{ date }}</strong> — {{ total }} ккал
+            <strong>{{ date }}</strong> — {{ total }} kcal
             {% if norm.calories %}
-                з {{ norm.calories }} ккал
+                from {{ norm.calories }} kcal
                 <div class="progress-track">
                     <div class="progress-fill{% if total > norm.calories %} is-over{% endif %}"
                          style="width: {% widthratio total norm.calories 100 %}%; max-width: 100%;"></div>
                 </div>
-                <span class="progress-label">{% widthratio total norm.calories 100 %}% від норми</span>
+                <span class="progress-label">{% widthratio total norm.calories 100 %}% from daily allowance</span>
             {% endif %}
         </div>
     {% endfor %}
 
     <div class="diary-toolbar">
         <form method="GET" class="search-form">
-            <input type="text" name="q" placeholder="Пошук продукту, страви або дати..." value="{{ request.GET.q }}">
-            <button type="submit">Пошук</button>
+            <input type="text" name="q" placeholder="Product, dish or data search..." value="{{ request.GET.q }}">
+            <button type="submit">Search</button>
         </form>
-        <a href="{% url 'diary_add' %}" class="add-entry-btn">+ Додати запис</a>
+        <a href="{% url 'diary_add' %}" class="add-entry-btn">+ Add entry</a>
     </div>
 
 {% if not entries %}
-    <p>Записів поки немає.</p>
+    <p>No requests yet.</p>
 {% else %}
     <div class="table-scroll">
         <table>
             <thead>
                 <tr>
-                    <th>Дата</th>
-                    <th>Продукт / страва</th>
-                    <th>Кількість (г)</th>
-                    <th>Калорії</th>
+                    <th>Date</th>
+                    <th>Product / dish</th>
+                    <th>Amount (g)</th>
+                    <th>Calories</th>
                     <th></th>
                 </tr>
             </thead>
@@ -49,7 +49,7 @@
                     <td>{{ entry.product|default:entry.dish }}</td>
                     <td>{{ entry.amount_grams }}</td>
                     <td>{{ entry.calories }}</td>
-                    <td><a href="{% url 'diary_delete' entry.pk %}">Видалити</a></td>
+                    <td><a href="{% url 'diary_delete' entry.pk %}">Delete</a></td>
                 </tr>
             {% endfor %}
             </tbody>

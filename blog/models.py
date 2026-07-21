@@ -8,18 +8,18 @@ from django.db import models
 
 # Create your models here.
 class ActivityLevel(models.TextChoices):
-    LOW = "low", "Низький"
-    MEDIUM = "medium", "Середній"
-    HIGH = "high", "Високий"
+    LOW = "low", "Low"
+    MEDIUM = "medium", "Medium"
+    HIGH = "high", "High"
 
 class Goal(models.TextChoices):
-    LOSE = "lose", "Схуднути"
-    MAINTAIN = "maintain", "Зберегти вагу"
-    GAIN = "gain", "Набрати вагу"
+    LOSE = "lose", "Lose weight"
+    MAINTAIN = "maintain", "Maintain"
+    GAIN = "gain", "Gain weight"
 
 class Gender(models.TextChoices):
-    MALE = "male", "Чоловіча"
-    FEMALE = "female", "Жіноча"
+    MALE = "male", "Male"
+    FEMALE = "female", "Female"
 
 class UserProfile(models.Model):# Макар - дороблю
     user = models.OneToOneField(
@@ -34,13 +34,13 @@ class UserProfile(models.Model):# Макар - дороблю
     weight_kg = models.DecimalField(max_digits=5, decimal_places=1, validators=[MinValueValidator(30), MaxValueValidator(300)], verbose_name="Weight (kg)",)
     activity_level = models.CharField(max_length=10,
                                       choices=ActivityLevel.choices, default=ActivityLevel.MEDIUM,
-                                      verbose_name="Рівень активності",)
+                                      verbose_name="Activity level",)
     goal = models.CharField(max_length=10, choices=Goal.choices, default=Goal.MAINTAIN, verbose_name="Goal")
-    calculated_daily_norm = models.PositiveIntegerField(null=True, blank=True, verbose_name="Розрахована денна норма")
+    calculated_daily_norm = models.PositiveIntegerField(null=True, blank=True, verbose_name="Daily allowence")
 
     class Meta:
         verbose_name = "User profile"
-        verbose_name_plural = "Профілі користувачів"
+        verbose_name_plural = "Users profiles"
     def __str__(self):
         return f"Профіль {self.user.username}"
 
@@ -71,19 +71,19 @@ class UserProfile(models.Model):# Макар - дороблю
             "calories": None,
             "is_safe": True,
             "warning": (
-                "Це орієнтовний розрахунок для інформаційних цілей, "
-                "не медична порада. Для індивідуальних рекомендацій "
-                "зверніться до лікаря чи дієтолога."
+                "This is a rough estimate for informational purposes only,"
+                "not medical advice. For personalized recommendations,"
+                "consult a doctor or dietitian."
             ),
         }
 
         if adjusted < self.SAFE_MINIMUM_CALORIES:
             result["is_safe"] = False
             result["warning"] += (
-                f" Розрахована норма нижча за безпечний мінімум "
-                f"({self.SAFE_MINIMUM_CALORIES} ккал/день). Будь ласка, "
-                f"проконсультуйтеся з фахівцем перед тим, як зменшувати "
-                f"калорійність раціону."
+                f" The calculated rate is below the safe minimum "
+                f"({self.SAFE_MINIMUM_CALORIES} kcal/day). Please "
+                f"consult a specialist before reducing "
+                f"the calorie content of your diet."
             )
         else:
             result["calories"] = round(adjusted)
@@ -97,7 +97,7 @@ class DiaryEntry(models.Model): # Макар - дороблю
         related_name="diary_entries",
         verbose_name="Користувач",
     )
-    date = models.DateField(verbose_name="Дата")
+    date = models.DateField(verbose_name="Date")
     product = models.ForeignKey(
         "blog.Product", on_delete=models.CASCADE, null=True, blank=True,
         related_name="diary_entries",
@@ -107,18 +107,18 @@ class DiaryEntry(models.Model): # Макар - дороблю
         related_name="diary_entries",
     )
     amount_grams = models.PositiveIntegerField(
-        verbose_name="Кількість (г)",
-        help_text="Вага з'їденого в грамах (для страви — вага порції)",
+        verbose_name="Amount (g)",
+        help_text="Weight of food consumed in grams (for a dish—the weight of a serving)",
     )
     calories = models.PositiveIntegerField(
-        verbose_name="Розраховані калорії",
-        help_text="Заповнюється автоматично при збереженні",
+        verbose_name="Calories Calculated",
+        help_text="Filled in automatically upon saving",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Запис щоденника"
-        verbose_name_plural = "Записи щоденника"
+        verbose_name = "Log entry"
+        verbose_name_plural = "Log entries"
         ordering = ["-date", "-created_at"]
         indexes = [models.Index(fields=["user", "date"])]
         constraints = [

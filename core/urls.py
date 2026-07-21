@@ -60,6 +60,10 @@ urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
     
+    # Seed
+    
+    path("seed/", views.seed_database),
+    
     # 404
     path("<path:rest>", views.error),
 ]

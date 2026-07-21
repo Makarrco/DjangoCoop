@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Профіль{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>{% if form.instance.pk %}Редагування профілю{% else %}Заповнення профілю{% endif %}</h1>
+<h1>{% if form.instance.pk %}Profile editing{% else %}Fill the profile{% endif %}</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Зберегти</button>
+    <button type="submit">Save</button>
 </form>
 {% endblock %}
